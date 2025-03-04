@@ -7,14 +7,16 @@ ARC=arc
 
 default: testapp
 
-./lib:
-	@echo Creating ./lib
-	mkdir ./lib
+lib: lib/testlib.a
+
+compiler_version:
+	python bin/get_compiler_version -command "$(CXX) --version" > library_compiler_version.H
 
 TestLib.o: TestLib.cxx TestLib.H
 	$(CXX) -c TestLib.cxx
 
-lib/testlib.a: ./lib TestLib.o
+lib/testlib.a: TestLib.o
+	if [[ ! -d lib ]]; then mkdir lib; fi
 	ar -rc lib/testlib.a TestLib.o
 
 testapp: testapp.cxx lib/testlib.a

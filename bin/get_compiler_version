@@ -1,0 +1,99 @@
+#!/usr/bin/python -B
+# vim: autoindent tabstop=8 shiftwidth=4 expandtab softtabstop=4 filetype=python
+
+import os,sys,re
+
+'''
+Get the compiler version info and create FL_COMPILER_VERSION macros on stdout.
+'''
+
+def HelpAndExit():
+    '''Show help screen and exit the program.'''
+    sys.stderr.write("""
+    get_compiler_version - Get the compiler version info and write out version macros
+
+    EXAMPLE
+    python bin/get_compiler_version -command "g++ --version" > Fl_Compiler_Info.H
+    """)
+    sys.exit(1)
+
+def GetCompilerVersion(cmd):
+    '''
+    Run specified command to get the compiler version info, and return any sane result.
+    On any error, we simply exit with a non-zero exit code, reporting error msg to stderr.
+    '''
+    # Invoke the compiler version command
+    try:
+        fp = os.popen(cmd, "r")
+    except IOError as e:
+        sys.stderr.write("popen(%s) failed: " % (cmd, e.strerror))
+        sys.exit(1)
+    # Parse the compiler's version# output
+    while 1:
+        line = fp.readline()
+        if not line: break
+        compiler = ""
+
+        # PARSE GNU COMPILER VERSION INFO
+        try:
+            # g++ (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+            # --- ------------------------------- -----
+            #  |                 |                  |________________________________________
+            #  |                 |__________________________________________                 |
+            #  |___________________________________________________         |                |
+            #                                                     _|_     __|___     ________|________
+            (compiler, junk, major, minor, patch) = re.search( "^(g++)\s+(\(.*\))\s+(\d+)\.(\d+)\.(\d+)", line).groups()
+            break
+        except:
+            pass
+
+        # PARSE CLANG COMPILER VERSION INFO
+        try:
+            # clang version 10.0.0-4ubuntu1
+            # -----         ------
+            #  |              |_____________________________________________________
+            #  |______________________________________________                      |
+            #                                               __|__           ________|________
+            (compiler, major, minor, patch) = re.search( "^(clang) version (\d+)\.(\d+)\.(\d+)", line).groups()
+            break
+        except:
+            pass
+        # TODO: Check other compiler output here
+
+    # Close output, and check what we got and return any sane result
+    err = fp.close()
+    if err != None:
+        sys.stderr.write("error: Running '%s' returned exit code %d\n" % (cmd, err))
+        sys.exit(1)
+    if compiler == "":
+        sys.stderr.write("error: could not parse compiler version info from '%s'\n" % cmd)
+        sys.exit(1)
+    return (compiler, major, minor, patch)
+
+###
+### MAIN
+###
+def main():
+    # Handle command line
+    if ( len(sys.argv) < 2 or sys.argv[1] == "-help" or sys.argv[1] == "--help" ):
+        sys.stderr.write("error: missing compiler version command.\n")
+        HelpAndExit()
+    elif ( sys.argv[1] == "-command" ):
+        (compiler, major, minor, patch) = GetCompilerVersion(sys.argv[2])
+        # Write macro definitions
+        print('#ifndef FL_COMPILER_INFO_H')
+        print('#define FL_COMPILER_INFO_H')
+        print('')
+        print('// FLTK library build compiler version')
+        print('#  define FL_COMPILER_NAME  "%s"' % compiler)
+        print('#  define FL_COMPILER_MAJOR %s' % major)
+        print('#  define FL_COMPILER_MINOR %s' % minor)
+        print('#  define FL_COMPILER_PATCH %s' % patch)
+        print('#endif /*FL_COMPILER_INFO_H*/')
+        print('')
+        sys.exit(0)
+    sys.exit(0)
+
+if __name__ == "__main__":
+    main()
+
