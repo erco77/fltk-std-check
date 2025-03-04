@@ -13,7 +13,7 @@ def HelpAndExit():
     get_compiler_version - Get the compiler version info and write out version macros
 
     EXAMPLE
-    python bin/get_compiler_version -command "g++ --version" > Fl_Compiler_Info.H
+    python bin/get_compiler_version -command "g++ --version" > library_compiler_version.H
     """)
     sys.exit(1)
 
@@ -38,11 +38,11 @@ def GetCompilerVersion(cmd):
         try:
             # g++ (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
             # --- ------------------------------- -----
-            #  |                 |                  |________________________________________
-            #  |                 |__________________________________________                 |
-            #  |___________________________________________________         |                |
-            #                                                     _|_     __|___     ________|________
-            (compiler, junk, major, minor, patch) = re.search( "^(g++)\s+(\(.*\))\s+(\d+)\.(\d+)\.(\d+)", line).groups()
+            #  |                 |                  |_______________________________________
+            #  |                 |_________________________________________                 |
+            #  |__________________________________________________         |                |
+            #                                                    _|_     __|___     ________|________
+            (compiler, junk, major, minor, patch) = re.search("^(g++)\s+(\(.*\))\s+(\d+)\.(\d+)\.(\d+)", line).groups()
             break
         except:
             pass
@@ -51,10 +51,10 @@ def GetCompilerVersion(cmd):
         try:
             # clang version 10.0.0-4ubuntu1
             # -----         ------
-            #  |              |_____________________________________________________
-            #  |______________________________________________                      |
-            #                                               __|__           ________|________
-            (compiler, major, minor, patch) = re.search( "^(clang) version (\d+)\.(\d+)\.(\d+)", line).groups()
+            #  |              |____________________________________________________
+            #  |_____________________________________________                      |
+            #                                              __|__           ________|________
+            (compiler, major, minor, patch) = re.search("^(clang) version (\d+)\.(\d+)\.(\d+)", line).groups()
             break
         except:
             pass
