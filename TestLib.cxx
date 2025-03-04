@@ -4,10 +4,10 @@
 void TestLib::test_populate(void) {
   name("John Doe");
   value_clear();
-  value_add(1);
-  value_add(2);
-  value_add(3);
-  value_add(4);
+  value_append(1);
+  value_append(2);
+  value_append(3);
+  value_append(4);
 }
 
 // Show the class's contents

@@ -1,7 +1,7 @@
-#include <string>       // std::string
-#include <vector>       // std::vector
-#include <stdio.h>      // std::vector
-#include "common.H"     // Fl_Export, etc
+#include <string>
+#include <vector>
+#include <stdio.h>
+#include "common.H"     // Fl_Export, g++ vers checks, etc
 
 class FL_EXPORT TestLib {
   // private data
@@ -12,18 +12,14 @@ public:
   //    (none at this time)
 
   // ctor/dtor
-  TestLib() {
-    fprintf(stderr, "--- TestLib CTOR\n");
-  }
-  ~TestLib() {
-    fprintf(stderr, "--- TestLib DTOR\n");
-  }
+  TestLib() { fprintf(stderr, "--- TestLib CTOR\n"); }
+  ~TestLib() { fprintf(stderr, "--- TestLib DTOR\n"); }
 
   // set
   void name(const char *s) { name_ = s; }
   void name(std::string& s) { name_ = s; }
   void value_clear() { value_arr_.clear(); }
-  void value_add(int i) { value_arr_.push_back(i); }
+  void value_append(int i) { value_arr_.push_back(i); }
 
   // get
   const char* name(void) const { return name_.c_str(); }
