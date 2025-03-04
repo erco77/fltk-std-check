@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 
-# Override any of these with 'make -D FOO=bar'
+# Override any of these with e.g. 'make CXX=clang'
 CXX=g++
 LINK=g++
 ARC=arc
@@ -23,5 +23,5 @@ testapp: testapp.cxx lib/testlib.a
 clean:
 	- /bin/rm *.o
 	if [[ -e lib/testlib.a ]]; then /bin/rm lib/testlib.a; fi
-	- /bin/rmdir lib
+	if [[ -d lib           ]]; then /bin/rmdir lib;        fi
 
