@@ -21,8 +21,16 @@
 // Get library compiler version
 #include "library_compiler_version.H"
 
+// clang compiler version check (must be before GNU)
+#if defined(__clang__)
+#if __clang_major__ != FL_COMPILER_MAJOR
+#warning Different major compiler versions: See <some_url>
+#elif __clang_minor__ != FL_COMPILER_MINOR
+#warning Different minor compiler versions: See <some_url>
+#endif /* clang check */
+
 // GNU compiler version check
-#ifdef __GNUC__
+#elif defined(__GNUC__)
   #if __GNUC__ != FL_COMPILER_MAJOR
     #warning Different major compiler versions: See <some_url>
   #elif __GNUC_MINOR__ != FL_COMPILER_MINOR
