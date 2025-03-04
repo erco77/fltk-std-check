@@ -54,7 +54,7 @@ def GetCompilerVersion(cmd):
             #  |              |_____________________________________________________
             #  |______________________________________________                      |
             #                                               __|__           ________|________
-            (compiler, major, minor, patch) = re.search(r"^(clang) version (\d+)\.(\d+)\.(\d+)", line).groups()
+            (compiler, major, minor, patch) = re.search(r"^.*(clang) version (\d+)\.(\d+)\.(\d+)", line).groups()
             break
         except:
             pass
