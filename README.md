@@ -12,14 +12,16 @@ Small test suite to exercise std use in a library/app situation
     common.H      - Handles FL_EXPORT and compiler version checks
     testapp.cxx   - The test application
     Makefile      - Has these targets:
-      clean       - clean everything
-      default     - builds lib and testapp
-      lib         - builds just the lib (lib/testlib.a file)
-      testapp     - builds just the testapp (and checks lib vs app compiler versions)
-
     bin/get_compiler_version
                   - python script that creates FL_COMPILER_XXX macros
 
+## Make targets
+
+    clean       - clean everything
+    default     - builds lib and testapp
+    lib         - builds just the lib (lib/testlib.a file)
+    testapp     - builds just the testapp (and checks lib vs app compiler versions)
+    compiler_version - updates the FL_COMPILER_XXX macros
 
 ## Normal Build
 By default the Makefile builds with g++ on linux, and should
@@ -46,4 +48,3 @@ The following should trigger a #warning directive when building the "testapp":
 The build for 'testapp' will post a #warning, assuming the output
 of 'clang++10 --version' and 'g++ --version' differ.
 
-##
