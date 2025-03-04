@@ -34,3 +34,4 @@ testapp
 
 # Project ignores
 library_compiler_version.H
+/build
